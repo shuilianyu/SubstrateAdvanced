@@ -21,18 +21,13 @@ pub mod pallet {
     };
     use frame_system::pallet_prelude::*;
     use sp_std::vec::Vec;
-    // use sp_runtime::verify_encoded_lazy
 
     #[pallet::config]
     pub trait Config: frame_system::Config {
         type Event: From<Event<Self>> + IsType<<Self as frame_system::Config>::Event>;
-
-        fn get_claim_limit() -> usize;
-        // fn getClaimLimit() -> u8 ;
-        // type ClaimLimit: Get<u8>;
-
-        // #[pallet::constant]
-		// type ClaimLimit: u8;
+        
+        #[pallet::constant]
+		type ClaimLimit: Get<u32>;
     }
 
     #[pallet::pallet]
@@ -68,8 +63,6 @@ pub mod pallet {
     #[pallet::hooks]
     impl<T: Config> Hooks<BlockNumberFor<T>> for Pallet<T> {}
 
-
-
     #[pallet::call]
     impl<T: Config> Pallet<T> {
         #[pallet::weight(0)]
@@ -77,12 +70,8 @@ pub mod pallet {
             origin: OriginFor<T>, 
             claim: Vec<u8>
         ) ->  DispatchResultWithPostInfo{
-            ensure!(claim.len() < T::get_claim_limit(), Error::<T>::InvalidClaim);
-            // assert!(claim.length > ClaimLimit, "");
-            // assert!(claim.length > )
-            // if (T::ClaimMaxLength::get();
-            // assert!(T::ClaimMaxLength::get(), "");
-            
+            ensure!(claim.len() < T::ClaimLimit::get() as usize, Error::<T>::InvalidClaim);
+
             let sender = ensure_signed(origin)?;
 
             ensure!(!Proofs::<T>::contains_key(&claim), Error::<T>::ProofAlreadyExist);

@@ -129,8 +129,6 @@ pub fn native_version() -> NativeVersion {
 
 const NORMAL_DISPATCH_RATIO: Perbill = Perbill::from_percent(75);
 
-
-
 parameter_types! {
 	pub const Version: RuntimeVersion = VERSION;
 	pub const BlockHashCount: BlockNumber = 2400;
@@ -268,13 +266,14 @@ impl pallet_template::Config for Runtime {
 
 pub const CLAIM_LIMIT: usize = 5;
 
+parameter_types! {
+	pub const ClaimLimit: u32 = 5;
+}
 
 impl pallet_poe::Config for Runtime {
 	type Event = Event;
 
-	fn get_claim_limit() -> usize {
-        return CLAIM_LIMIT ;
-    }
+	type ClaimLimit = ClaimLimit;
 }
 
 // Create the runtime by composing the FRAME pallets that were previously configured.

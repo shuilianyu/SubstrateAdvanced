@@ -25,11 +25,8 @@ frame_support::construct_runtime!(
 parameter_types! {
 	pub const BlockHashCount: u64 = 250;
 	pub const SS58Prefix: u8 = 42;
+	pub const ClaimLimit: u32 = 5;
 }
-
-
-pub const CLAIM_LIMIT: usize = 5;
-
 
 impl system::Config for Test {
 	type BaseCallFilter = ();
@@ -54,15 +51,14 @@ impl system::Config for Test {
 	type OnKilledAccount = ();
 	type SystemWeightInfo = ();
 	type SS58Prefix = SS58Prefix;
+	
 }
 
 
 impl pallet_poe::Config for Test {
 	type Event = Event;
 
-	fn get_claim_limit() -> usize {
-		return CLAIM_LIMIT;
-	}
+	type ClaimLimit = ClaimLimit;
 }
 
 
